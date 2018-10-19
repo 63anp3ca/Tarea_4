@@ -1,97 +1,60 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
-
-@import url(https://d3js.org/colorbrewer.v1.css);
-
-svg {
-  font: 10px sans-serif;
-}
-
-.day {
-  fill: #fff;
-  stroke: #ccc;
-}
-
-.month {
-  fill: none;
-  stroke: #000;
-  stroke-width: 2px;
-}
-
-</style>
 <body>
-<script src="https://d3js.org/d3.v3.min.js"></script>
-<script>
+<html>
+<hr color="#EFEFEB" />
 
-var margin = {top: 5.5, right: 0, bottom: 5.5, left: 19.5},
-    width = 960 - margin.left - margin.right,
-    height = 130 - margin.top - margin.bottom,
-    size = height / 7;
+<head>
+	  <link rel="stylesheet" href="style.css" />
+	  <b><font size="4"><span style="font-family: 'Arial Narrow'; font-weight: bold; font-style: normal; text-decoration: none; font-size: 24pt;color: #004080">MOOCS Uniandes... ¿Realmente estamos llegando a los interesados?</span></font></b>
+	  <hr color="#FFFFFF" />
+	  <b><font size="4"><span style="font-family: 'Arial Narrow'; font-weight: bold; font-style: normal; text-decoration: none; font-size: 18pt;color: #004080">Volumen diario de inscripciones</span></font></b>
+	  <hr color="#FFFFFF" />
+	  <b>
+	  	 <font size="4">
+		 	   <span style="font-family: 'Arial Narrow'; font-style: normal; text-decoration: none; font-size: 10pt;color: #004080">
+			   La Universidad de los Andes, dentro de su proceso de innovación y exploración del esquema educativo, ha desarrollado un conjunto de cursos virtuales (MOOC’s) que pretenden extender la enseñanza mucho más allá de sus fronteras físicas. En particular, el departamento de Psicología ha creado el MOOC “Sexualidad… mucho más que sexo”, el cual desea mejorar la experiencia de los estudiantes para hablar acerca de sexualidad con niñas, niños, estudiantes, pareja o colegas. Este curso se encuentra implementado dentro de la plataforma COURSERA.
+			   </span>
+		</font>
+	  </b>
+	  <hr color="#FFFFFF" />
+	  <b>
+	  	 <font size="4">
+		 	   <span style="font-family: 'Arial Narrow'; font-style: normal; text-decoration: none; font-size: 10pt;color: #004080">
+			   A continuación se presenta una visualización calendarizada, en donde se puede evidenciar el volumen de inscripciones diarias durante los 3 años que lleva el curso en línea.
+			   </span>
+		</font>
+	  </b>
+</head>
+<hr color="#EFEFEB" />
 
-var day = function(d) { return (d.getDay() + 6) % 7; }, // monday = 0
-    week = d3.time.format("%W"), // monday-based week number
-    date = d3.time.format("%Y-%m-%d"),
-    percent = d3.format("+.1%");
+<div align="center"><img src="imagenEx15msex.jpg" width="476" height="298" alt="" title="" /></div>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="app.js"></script>
 
-var color = d3.scale.quantize()
-    .domain([-.05, .05])
-    .range(d3.range(9));
+<hr color="#EFEFEB" />
 
-var svg = d3.select("body").selectAll("svg")
-    .data(d3.range(1990, 2011))
-  .enter().append("svg")
-    .attr("class", "RdYlGn")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-svg.append("text")
-    .attr("transform", "translate(-6," + size * 3.5 + ")rotate(-90)")
-    .attr("text-anchor", "middle")
-    .text(function(d) { return d; });
-
-var rect = svg.selectAll(".day")
-    .data(function(d) { return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
-  .enter().append("rect")
-    .attr("class", "day")
-    .attr("width", size)
-    .attr("height", size)
-    .attr("x", function(d) { return week(d) * size; })
-    .attr("y", function(d) { return day(d) * size; })
-    .datum(date);
-
-rect.append("title")
-    .text(function(d) { return d; });
-
-svg.selectAll(".month")
-    .data(function(d) { return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
-  .enter().append("path")
-    .attr("class", "month")
-    .attr("d", monthPath);
-
-d3.csv("dji.csv", function(csv) {
-  var data = d3.nest()
-    .key(function(d) { return d.Date; })
-    .rollup(function(d) { return (d[0].Close - d[0].Open) / d[0].Open; })
-    .map(csv);
-
-  rect.filter(function(d) { return d in data; })
-      .attr("class", function(d) { return "day q" + color(data[d]) + "-9"; })
-    .select("title")
-      .text(function(d) { return d + ": " + percent(data[d]); });
-});
-
-function monthPath(t0) {
-  var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
-      d0 = +day(t0), w0 = +week(t0),
-      d1 = +day(t1), w1 = +week(t1);
-  return "M" + (w0 + 1) * size + "," + d0 * size
-      + "H" + w0 * size + "V" + 7 * size
-      + "H" + w1 * size + "V" + (d1 + 1) * size
-      + "H" + (w1 + 1) * size + "V" + 0
-      + "H" + (w0 + 1) * size + "Z";
-}
-
-</script>
+<div style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table width="100%" border="0" cellpadding="2" cellspacing="2" style="border-width: 0px; background-color: #ffffff;">
+<tr valign="top">
+<td><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><img width="163" height="78" alt="" hspace=1 vspace=1 src="logoUA.png"></p>
+</td>
+<td>
+	<span style="font-size: 16px;font-family: 'Bahnschrift SemiCondensed', Arial; font-weight: normal; font-style: normal; text-decoration: none;">Presentado por: <a href="mailto:jc.oyuela@uniandes.edu.co" onMouseOver="window.status='Contactar al desarrollador'; return true;" onMouseOut="window.status=' '; return true;">Juan Carlos Oyuela Matiz</a></span>
+</td>
+<td>
+	<a href="https://opensource.org/licenses/mit-license.php"><span style="font-size: 16px;font-family: 'Bahnschrift Light Condensed', 'Bahnschrift Condensed'; font-weight: normal; font-style: normal; text-decoration: none;">Licencia MIT</span></a>
+</td>
+<td>
+	<span style="font-size: 16px;font-family: 'Bahnschrift SemiCondensed', Arial; font-weight: normal; font-style: normal; text-decoration: none;">Código: 201711608</span>
+</td>
+<td>
+	<span style="font-size: 16px;font-family: 'Bahnschrift SemiCondensed', Arial; font-weight: normal; font-style: normal; text-decoration: none;">MINE - Visual Analytics 201820</span>
+</td>
+<td width="1"><br />
+</tr>
+</table>
+</div>
+<hr color="#EFEFEB" />
+<img src="AbstraccionWWH.JPG" width="660" height="324" alt="" title="" />
+<img src="insightsJco.JPG" width="660" height="324" alt="" title="" />
+</html>
